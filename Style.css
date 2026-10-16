@@ -1,0 +1,406 @@
+
+        html {
+            scroll-behavior: smooth;
+        }
+        *, *::before, *::after {
+            cursor: none !important;
+        }
+        
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        #cursor{
+            position: fixed;    
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);   
+            transition: transform 0.1s ease, background 0.3s ease, width 0.2s ease, height 0.2s ease;
+            mix-blend-mode: difference;
+            box-shadow: 
+                0 0 6px 2px rgba(255, 255, 255, 0.8),    /* ← inner glow */
+                0 0 20px 6px rgba(255, 255, 255, 0.4),   /* ← outer glow */
+                0 0 40px 10px rgba(255, 255, 255, 0.2);  /* ← far glow */ 
+               
+        }
+        a:hover ~ #cursor ,button:hover ~ #cursor {
+            width: 24px;
+            height: 24px;
+        }
+
+        body {
+            /*background-color: #5E4B43;*/
+            background-image: url("images/the_forest.jpeg");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            font-family: Arial;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            border: none;        /* ← add this */
+            outline: none;       /* ← add this */
+            overflow: visible;
+        }
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 20) 0%,transparent 20%);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0;                    /* ← hidden by default */
+            transition: opacity 0.5s ease;
+        }
+
+        .navbar.faded::before {
+            opacity: 1;                    /* ← shows when scrolled */
+        }
+
+        .name {
+            color: black;
+            font-size: clamp(22px, 3vw, 60px);
+            font-family: "Dancing Script", cursive;
+            white-space: nowrap;
+        }
+
+        .menu {
+            display: flex;
+            color: black;
+            gap: clamp(15px, 3vw, 30px);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: black;
+            font-size: clamp(13px, 1.5vw, 20px);
+            white-space: nowrap;
+            transition: color 0.4s ease;
+            border: 1px solid transparent; /* ← hidden by default */
+            padding: 6px 16px;
+        }
+        .menu a.active {
+            color: white ;
+            border: 1px solid currentColor; /* ← shows only when active */
+            border-radius: 25px;
+            
+        }
+
+        .menu a:hover {
+            font-weight: bold;
+            
+        }
+        
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5%;
+
+            
+        }
+        
+
+        .hero h1 {
+            font-size: clamp(36px, 7vw, 100px);
+            line-height: 1.1;
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+        }
+
+        .hero h1.git {
+            color: transparent;
+            -webkit-text-stroke: 1.5px white;
+        }
+
+        /* ── SECTIONS ── */
+        .colorme {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            padding: clamp(80px, 10vw, 140px) 20%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+    
+        }
+
+        /* ── ABOUT GRID ── */
+        .about-title {
+            font-size: clamp(32px, 5vw, 64px);
+            color: white;
+            font-family: "Dancing Script", cursive;
+            margin-bottom: 24px;
+        }
+
+        .about-text {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(12px, 1.5vw, 16px);
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.75);
+            max-width: 900px;
+        }
+        .about-header {
+            display: grid;
+            grid-template-columns: 2fr 2fr;  /* ← was 1fr 1fr, now text gets more space */
+            gap: 40px;
+            align-items: start;
+            margin-bottom: 60px;
+            max-width: 900px;               /* ← add this to prevent stretching too wide */
+            margin-left: auto;               /* ← these two center the whole block */
+            margin-right: auto;
+        }
+
+        .about-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1500px;       /* ← match the header width */
+            margin-left: auto;       /* ← center the cards too */
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .about-card {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 36px 28px;
+            transition: border-color 0.3s, background 0.3s, backdrop-filter 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            background: transparent;
+            border-radius: 12px;
+        }
+
+        .about-card::after {
+        content: '→';
+        position: absolute;
+        bottom: 20px;
+        right: 24px;
+        color: rgba(255,255,255,0.3);
+        font-size: 18px;
+        transition: color 0.3s, transform 0.3s;
+        }
+
+        .about-card:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.05);        /* ← subtle white tint */
+            backdrop-filter: blur(10px);                   /* ← frosted glass blur */
+            -webkit-backdrop-filter: blur(10px);           /* ← safari support */
+            /*box-shadow: 
+                0 0 20px rgba(255, 255, 255, 0.05),        /* ← soft outer glow */
+                /*inset 0 0 20px rgba(255, 255, 255, 0.03);*/  /* ← inner glow */
+        }
+
+        .about-card:hover::after {
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .about-card h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(20px, 2.5vw, 30px);
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .about-card p {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(12px, 1.2vw, 15px);
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+        .about-header {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+        }
+
+        /* ── SKILLS GRID ── */
+        .about-header.single {
+            grid-template-columns: 1fr;  /* ← single column when no text */
+        }
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 10px;
+        }
+
+        .skill-tag {
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 8px 20px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(12px, 1.2vw, 15px);
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.05em;
+            transition: border-color 0.3s, color 0.3s, background 0.3s; /* ← add background */
+            cursor: pointer;                                              /* ← add this */
+        }
+        .skill-group-label {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(20px, 2.5vw, 30px);
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .skill-tag:hover {
+            border-color: yellow;
+            color: yellow;
+            background: rgba(255, 255, 0, 0.05);
+        }
+
+        /* ── WORK GRID ── */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 10px;
+        }
+
+        .work-card {
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 28px 24px;
+            transition: border-color 0.3s;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+        .work-card::after {
+            content: '→';
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            color: rgba(255,255,255,0.3);
+            font-size: 18px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .work-card:hover::after {
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .work-card:hover {
+            color: clear;
+            -webkit-text-stroke: 1px rgb(255, 0, 0);
+            border-color: rgba(255,255,255,0.7);
+        }
+
+        .work-card h3 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(14px, 1.5vw, 18px);
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .work-card p {
+            font-size: clamp(12px, 1.2vw, 15px);
+            color: rgba(255,255,255,0.6);
+            line-height: 1.5;
+        }
+
+        /* ── CONTACT ── */
+        .contact-links {
+            display: flex;
+            flex-direction: row;      /* ← side by side instead of column */
+            gap: 24px;
+            margin-top: 10px;
+            justify-content: center;  /* ← centers them horizontally */
+            align-items: center;
+        }
+
+        .contact-links a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: clamp(14px, 1.5vw, 18px);
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            
+            padding-bottom: 12px;
+            transition: color 0.3s, border-color 0.3s;
+            width: fit-content;
+        }
+
+        .contact-links a:hover {
+            color: yellow;
+            border-color: yellow;
+        }
+
+        /* ── HAMBURGER ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            display: block;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .hamburger { display: flex; }
+
+            .menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                right: 5%;
+                background: rgba(0,0,0,0.9); 
+                padding: 20px;
+                gap: 20px;
+                border-radius: 8px;
+            }
+            .menu.open { display: flex; }
+            .menu a { font-size: 18px; }
+        }
+    
